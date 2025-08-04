@@ -9,11 +9,13 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.button.MaterialButton
 import com.x7ree.Toolsbox.R
 import com.x7ree.Toolsbox.data.model.ToolItem
 import com.x7ree.Toolsbox.databinding.FragmentDashboardBinding
@@ -105,15 +107,28 @@ class DashboardFragment : Fragment(), AddEditToolDialog.OnToolItemSaveListener {
     }
     
     private fun showDeleteConfirmDialog(toolItem: ToolItem) {
-        AlertDialog.Builder(requireContext())
+        val customView = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_delete_confirm, null)
+        val btnCancel = customView.findViewById<MaterialButton>(R.id.btn_cancel)
+        val btnDelete = customView.findViewById<MaterialButton>(R.id.btn_delete)
+        val tvMessage = customView.findViewById<TextView>(R.id.tv_message)
+
+        tvMessage.text = getString(R.string.confirm_delete, toolItem.name)
+
+        val dialog = AlertDialog.Builder(requireContext())
             .setTitle(R.string.delete_tool)
-            .setMessage(getString(R.string.confirm_delete, toolItem.name))
-            .setPositiveButton(R.string.delete) { _, _ ->
-                dashboardViewModel.deleteToolItem(toolItem.id)
-                Toast.makeText(context, R.string.tool_deleted, Toast.LENGTH_SHORT).show()
-            }
-            .setNegativeButton(R.string.cancel, null)
+            .setView(customView)
+            .setCancelable(false)
             .show()
+
+        btnCancel.setOnClickListener {
+            dialog.dismiss()
+        }
+
+        btnDelete.setOnClickListener {
+            dashboardViewModel.deleteToolItem(toolItem.id)
+            Toast.makeText(context, R.string.tool_deleted, Toast.LENGTH_SHORT).show()
+            dialog.dismiss()
+        }
     }
     
     private fun openUrl(url: String) {

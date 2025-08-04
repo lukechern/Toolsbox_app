@@ -1,16 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:padding="16dp">
+    android:fillViewport="true">
 
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="20dp"
+    android:background="@drawable/dialog_background">
+
+    <!-- 工具名称 -->
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
-        android:hint="@string/tool_name">
+        android:hint="@string/tool_name"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/et_tool_name"
@@ -21,11 +29,13 @@
 
     </com.google.android.material.textfield.TextInputLayout>
 
+    <!-- 工具简介 -->
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
-        android:hint="@string/tool_description">
+        android:hint="@string/tool_description"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/et_tool_description"
@@ -36,11 +46,13 @@
 
     </com.google.android.material.textfield.TextInputLayout>
 
+    <!-- 工具网址 -->
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
-        android:hint="@string/tool_url">
+        android:hint="@string/tool_url"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/et_tool_url"
@@ -51,11 +63,13 @@
 
     </com.google.android.material.textfield.TextInputLayout>
 
+    <!-- 排序序号 -->
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
-        android:hint="@string/sort_order">
+        android:hint="@string/sort_order"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/et_sort_order"
@@ -66,6 +80,7 @@
 
     </com.google.android.material.textfield.TextInputLayout>
 
+    <!-- 默认工具开关 -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -78,7 +93,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="@string/default_display"
-            android:textSize="16sp" />
+            android:textSize="16sp"
+            android:textColor="@android:color/black" />
 
         <TextView
             android:id="@+id/tv_switch_off"
@@ -107,21 +123,26 @@
 
     </LinearLayout>
 
+    <!-- 按钮区域 -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:gravity="end">
+        android:gravity="end"
+        android:layout_marginTop="8dp">
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_cancel"
-            style="@style/Widget.Material3.Button.OutlinedButton"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
             android:layout_width="wrap_content"
-            android:layout_height="48dp"
-            android:layout_marginEnd="8dp"
+            android:layout_height="36dp"
+            android:layout_marginEnd="12dp"
             android:text="@string/cancel"
             android:textSize="14sp"
             android:minWidth="80dp"
+            android:padding="0dp"
+            android:insetTop="0dp"
+            android:insetBottom="0dp"
             app:strokeColor="?attr/colorPrimary"
             app:strokeWidth="1dp"
             app:cornerRadius="8dp" />
@@ -129,13 +150,18 @@
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_save"
             android:layout_width="wrap_content"
-            android:layout_height="48dp"
+            android:layout_height="36dp"
             android:text="@string/save"
             android:textSize="14sp"
             android:minWidth="80dp"
+            android:padding="0dp"
+            android:insetTop="0dp"
+            android:insetBottom="0dp"
             app:backgroundTint="?attr/colorPrimary"
             app:cornerRadius="8dp" />
 
     </LinearLayout>
 
 </LinearLayout>
+
+</ScrollView>
