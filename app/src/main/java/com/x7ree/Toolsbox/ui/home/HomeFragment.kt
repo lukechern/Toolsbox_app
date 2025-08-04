@@ -12,6 +12,7 @@ import android.webkit.WebChromeClient
 import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.core.view.GravityCompat
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -27,6 +28,7 @@ class HomeFragment : Fragment() {
     
     private lateinit var homeViewModel: HomeViewModel
     private lateinit var toolDrawerAdapter: ToolDrawerAdapter
+    private lateinit var animatedMenuDrawable: AnimatedMenuDrawable
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,19 +46,27 @@ class HomeFragment : Fragment() {
         setupWebView()
         setupDrawer()
         observeData()
+        setupAnimatedMenu()
         
         return binding.root
     }
     
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.home_menu, menu)
+        // 设置动画菜单图标
+        val menuItem = menu.findItem(R.id.action_open_drawer)
+        menuItem.icon = animatedMenuDrawable
         super.onCreateOptionsMenu(menu, inflater)
     }
     
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.action_open_drawer -> {
-                openDrawer()
+                if (binding.drawerLayout.isDrawerOpen(GravityCompat.END)) {
+                    binding.drawerLayout.closeDrawer(GravityCompat.END)
+                } else {
+                    openDrawer()
+                }
                 true
             }
             else -> super.onOptionsItemSelected(item)
@@ -120,11 +130,40 @@ class HomeFragment : Fragment() {
             adapter = toolDrawerAdapter
         }
         
+        // 监听抽屉状态变化以更新菜单图标
+        binding.drawerLayout.addDrawerListener(object : DrawerLayout.DrawerListener {
+            override fun onDrawerSlide(drawerView: View, slideOffset: Float) {
+                animatedMenuDrawable.setProgress(slideOffset)
+            }
+
+            override fun onDrawerOpened(drawerView: View) {
+                animatedMenuDrawable.setProgress(1f)
+            }
+
+            override fun onDrawerClosed(drawerView: View) {
+                animatedMenuDrawable.setProgress(0f)
+            }
+
+            override fun onDrawerStateChanged(newState: Int) {}
+        })
+        
         // 监听抽屉状态
         homeViewModel.isDrawerOpen.observe(viewLifecycleOwner) { isOpen ->
             if (isOpen) {
                 binding.drawerLayout.openDrawer(GravityCompat.END)
             } else {
+                binding.drawerLayout.closeDrawer(GravityCompat.END)
+            }
+        }
+    }
+    
+    private fun setupAnimatedMenu() {
+        // 创建动画菜单图标，使用更适合ActionBar的尺寸
+        animatedMenuDrawable = AnimatedMenuDrawable(56, 56)
+        
+        // 设置抽屉点击监听器，用于切换动画状态
+        binding.navView.setOnClickListener {
+            if (binding.drawerLayout.isDrawerOpen(GravityCompat.END)) {
                 binding.drawerLayout.closeDrawer(GravityCompat.END)
             }
         }

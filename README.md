@@ -152,6 +152,14 @@ app/src/main/java/com/x7ree/Toolsbox/
 - **GitHub Copilot** - 智能代码建议
 - **开源社区** - 丰富的开源库和文档资源
 
+Thanks to the following technologies and tools that made this project possible:
+
+- **AI Large Models** - Providing intelligent code generation and problem-solving capabilities
+- **AI Code Editors** - Improving development efficiency with intelligent completion and error detection
+- **Android Studio** - Powerful IDE support
+- **GitHub Copilot** - Intelligent code suggestions
+- **Open Source Community** - Rich open-source libraries and documentation resources
+
 ## 📞 联系方式 / Contact
 
 - **GitHub仓库**: [https://github.com/lukechern/Toolsbox_app](https://github.com/lukechern/Toolsbox_app)
@@ -161,6 +169,8 @@ app/src/main/java/com/x7ree/Toolsbox/
 ## ⚠️ 免责条款 / Disclaimer
 
 本项目app为爱发电，开源分享给全人类，不提供任何服务，不承担任何相关责任。用户在使用本应用时应自行承担所有风险，包括但不限于数据丢失、设备损坏、隐私泄露等。开发者不对因使用本应用而导致的任何直接或间接损失负责。
+
+This project app is powered by love and shared open-source with all humanity. It provides no services and assumes no responsibility. Users should bear all risks when using this application, including but not limited to data loss, device damage, privacy leaks, etc. The developer is not responsible for any direct or indirect losses caused by using this application.
 
 ## 📄 许可证 / License
 
