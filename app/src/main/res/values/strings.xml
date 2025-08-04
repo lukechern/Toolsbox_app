@@ -1,0 +1,33 @@
+<resources>
+    <string name="app_name">Toolsbox</string>
+    <string name="title_home">工具</string>
+    <string name="title_dashboard">配置</string>
+    
+    <!-- 工具管理相关 -->
+    <string name="add_tool">添加工具</string>
+    <string name="edit_tool">编辑工具</string>
+    <string name="delete_tool">删除工具</string>
+    <string name="tool_name">工具名称</string>
+    <string name="tool_description">工具简介</string>
+    <string name="tool_url">工具网址</string>
+    <string name="sort_order">排序序号</string>
+    <string name="save">保存</string>
+    <string name="cancel">取消</string>
+    <string name="delete">删除</string>
+    <string name="confirm_delete">确定要删除「%s」吗？</string>
+    <string name="tool_added">工具已添加</string>
+    <string name="tool_updated">工具已更新</string>
+    <string name="tool_deleted">已删除</string>
+    <string name="empty_tool_list">暂无工具项\n点击右下角按钮添加</string>
+    <string name="cannot_open_url">无法打开链接</string>
+    <string name="please_enter_tool_name">请输入工具名称</string>
+    <string name="please_enter_tool_description">请输入工具简介</string>
+    <string name="please_enter_tool_url">请输入工具网址</string>
+    <string name="please_enter_valid_sort_order">请输入有效的排序序号</string>
+    
+    <!-- 工具页面相关 -->
+    <string name="tool_list">工具列表</string>
+    <string name="no_tools_available">暂无可用工具\n请在配置页面添加工具</string>
+    <string name="loading">加载中...</string>
+    <string name="load_error">加载失败</string>
+</resources>
