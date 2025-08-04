@@ -34,6 +34,7 @@ class ToolItemAdapter(
         private val descriptionTextView: TextView = itemView.findViewById(R.id.tv_tool_description)
         private val urlTextView: TextView = itemView.findViewById(R.id.tv_tool_url)
         private val sortOrderTextView: TextView = itemView.findViewById(R.id.tv_sort_order)
+        private val defaultBadgeTextView: TextView = itemView.findViewById(R.id.tv_default_badge)
         private val editButton: View = itemView.findViewById(R.id.btn_edit)
         private val deleteButton: View = itemView.findViewById(R.id.btn_delete)
 
@@ -42,6 +43,9 @@ class ToolItemAdapter(
             descriptionTextView.text = toolItem.description
             urlTextView.text = toolItem.url
             sortOrderTextView.text = "排序: ${toolItem.sortOrder}"
+            
+            // 显示或隐藏默认工具徽标
+            defaultBadgeTextView.visibility = if (toolItem.isDefault) View.VISIBLE else View.GONE
 
             itemView.setOnClickListener { onItemClick(toolItem) }
             editButton.setOnClickListener { onEditClick(toolItem) }

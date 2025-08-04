@@ -79,8 +79,16 @@ class ToolRepository private constructor(context: Context) {
      * 添加工具项
      */
     fun addToolItem(toolItem: ToolItem): ToolItem {
-        val newItem = toolItem.copy(id = nextId++)
         val currentItems = _toolItems.value.toMutableList()
+        
+        // 如果新工具设为默认显示，则将其他工具的默认显示设为false
+        if (toolItem.isDefault) {
+            for (i in currentItems.indices) {
+                currentItems[i] = currentItems[i].copy(isDefault = false)
+            }
+        }
+        
+        val newItem = toolItem.copy(id = nextId++)
         currentItems.add(newItem)
         _toolItems.value = currentItems.sortedBy { it.sortOrder }
         saveToolItems()
@@ -94,6 +102,15 @@ class ToolRepository private constructor(context: Context) {
         val currentItems = _toolItems.value.toMutableList()
         val index = currentItems.indexOfFirst { it.id == toolItem.id }
         if (index != -1) {
+            // 如果工具设为默认显示，则将其他工具的默认显示设为false
+            if (toolItem.isDefault) {
+                for (i in currentItems.indices) {
+                    if (i != index) {
+                        currentItems[i] = currentItems[i].copy(isDefault = false)
+                    }
+                }
+            }
+            
             currentItems[index] = toolItem
             _toolItems.value = currentItems.sortedBy { it.sortOrder }
             saveToolItems()
@@ -115,5 +132,20 @@ class ToolRepository private constructor(context: Context) {
      */
     fun getToolItemById(id: Long): ToolItem? {
         return _toolItems.value.find { it.id == id }
+    }
+    
+    /**
+     * 获取默认显示的工具项，如果没有设置默认显示，则返回序号最小的工具
+     */
+    fun getDefaultToolItem(): ToolItem? {
+        val items = _toolItems.value
+        if (items.isEmpty()) return null
+        
+        // 先查找设置为默认显示的工具
+        val defaultItem = items.find { it.isDefault }
+        if (defaultItem != null) return defaultItem
+        
+        // 如果没有设置默认显示，返回序号最小的工具
+        return items.minByOrNull { it.sortOrder }
     }
 }

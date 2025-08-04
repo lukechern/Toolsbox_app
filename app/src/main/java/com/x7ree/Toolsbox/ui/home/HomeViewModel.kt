@@ -21,10 +21,11 @@ class HomeViewModel(application: Application) : AndroidViewModel(application) {
     val isDrawerOpen: LiveData<Boolean> = _isDrawerOpen
     
     init {
-        // 监听工具列表变化，自动选择第一个工具
+        // 监听工具列表变化，自动选择默认工具
         toolItems.observeForever { tools ->
             if (tools.isNotEmpty() && _currentToolItem.value == null) {
-                selectTool(tools.first())
+                val defaultTool = toolRepository.getDefaultToolItem()
+                defaultTool?.let { selectTool(it) }
             }
         }
     }
