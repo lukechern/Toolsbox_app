@@ -1,7 +1,7 @@
 # Toolsbox - 快捷工具箱
 
 <p align="center">
-  <img src="app/src/main/res/mipmap-xxxhdpi/ic_launcher.png" alt="Toolsbox Logo" width="128" height="128">
+  <img src="app\src\main\res\mipmap-xxxhdpi\ic_launcher.webp" alt="Toolsbox Logo" width="128" height="128">
 </p>
 
 <p align="center">
@@ -42,6 +42,39 @@ Toolsbox is a concise and efficient toolbox application designed to collect and 
 2. 点击右下角"+"按钮添加新工具
 3. 填写工具名称、简介、网址和排序序号
 4. 编辑或删除现有工具项
+
+### 编译方法 / Build Instructions
+#### 环境要求 / Requirements
+- Android Studio Arctic Fox (2020.3.1) 或更高版本
+- Android SDK API 36 (Android 15)
+- Kotlin 2.0.21 或更高版本
+- Gradle 8.11.1 或更高版本
+
+#### 编译步骤 / Build Steps
+1. 克隆项目到本地 / Clone the project locally
+   ```bash
+   git clone https://github.com/lukechern/Toolsbox_app.git
+   ```
+2. 使用Android Studio打开项目 / Open the project with Android Studio
+3. 等待Gradle同步完成 / Wait for Gradle sync to complete
+4. 连接Android设备或启动模拟器 / Connect an Android device or start an emulator
+5. 点击运行按钮或使用快捷键编译安装 / Click the run button or use shortcut to build and install
+   - Windows/Linux: `Shift + F10`
+   - macOS: `^R`
+
+#### 构建APK / Build APK
+- 调试版本 / Debug Build
+  ```bash
+  ./gradlew assembleDebug
+  ```
+- 发布版本 / Release Build
+  ```bash
+  ./gradlew assembleRelease
+  ```
+
+构建的APK文件位置：
+- Debug: `app/build/outputs/apk/debug/app-debug.apk`
+- Release: `app/build/outputs/apk/release/app-release.apk`
 
 ## 🛠 技术栈 / Tech Stack
 
