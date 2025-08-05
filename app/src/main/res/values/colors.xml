@@ -8,6 +8,7 @@
     <color name="teal_200">#FF03DAC5</color>
     <color name="teal_700">#FF018786</color>
     <color name="selected_item_background">#E3F2FD</color>
+    <color name="selected_item_background_purple">#EDE7F6</color>  <!-- 浅紫色背景 -->
     <color name="purple_primary">#FF6200EE</color>
     <color name="purple_light">#FFBB86FC</color>
     <color name="delete_red">#FFF44336</color>

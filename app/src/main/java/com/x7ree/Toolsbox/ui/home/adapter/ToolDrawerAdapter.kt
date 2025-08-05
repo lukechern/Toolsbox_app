@@ -46,22 +46,26 @@ class ToolDrawerAdapter(
     inner class ToolDrawerViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         private val nameTextView: TextView = itemView.findViewById(R.id.tv_drawer_tool_name)
         private val descriptionTextView: TextView = itemView.findViewById(R.id.tv_drawer_tool_description)
+        private val defaultBadgeTextView: TextView = itemView.findViewById(R.id.tv_default_badge)
 
         fun bind(toolItem: ToolItem) {
             nameTextView.text = toolItem.name
             descriptionTextView.text = toolItem.description
+            
+            // 显示或隐藏默认工具徽标
+            defaultBadgeTextView.visibility = if (toolItem.isDefault) View.VISIBLE else View.GONE
 
             // 设置选中状态
             itemView.isSelected = toolItem.id == selectedToolId
             itemView.setBackgroundResource(
                 if (toolItem.id == selectedToolId) {
-                    R.color.selected_item_background
+                    R.color.selected_item_background_purple
                 } else {
                     android.R.color.transparent
                 }
             )
 
-            itemView.setOnClickListener { 
+            itemView.setOnClickListener {
                 onToolClick(toolItem)
             }
         }

@@ -3,5 +3,6 @@
     <domain-config cleartextTrafficPermitted="true">
         <domain includeSubdomains="true">192.168.</domain>
         <domain includeSubdomains="true">cloudclipboard.net</domain>
+        <domain includeSubdomains="true">7ree.tech</domain>
     </domain-config>
 </network-security-config>
