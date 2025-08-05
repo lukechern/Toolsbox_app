@@ -5,6 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.0] - 2025-08-05
+
+### Added
+- 新增 剪贴板自动填充功能，可自动将系统剪贴板内容填充到网页指定文本框
+- 新增 工具管理中配置剪贴板目标文本框ID的参数
+
+### Fixed
+- 修复 剪贴板内容包含特殊字符（如换行符）时导致的JavaScript语法错误
 ## [1.71] - 2025-08-05
 
 ### Added

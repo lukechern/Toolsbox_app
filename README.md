@@ -12,7 +12,7 @@
     <img src="https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge" alt="License: MIT">
   </a>
   <a href="https://github.com/lukechern/Toolsbox_app">
-    <img src="https://img.shields.io/badge/version-1.71-blue.svg?style=for-the-badge" alt="Version">
+    <img src="https://img.shields.io/badge/version-2.0-blue.svg?style=for-the-badge" alt="Version">
   </a>
 </p>
 
@@ -29,6 +29,7 @@ Toolsbox is a concise and efficient toolbox application designed to collect and 
 - 🎯 **智能排序** - 自定义工具排序，重要工具优先显示 / **Smart Sorting** - Custom tool ordering, important tools displayed first
 - 🌐 **一键访问** - 点击即达，无需复制粘贴 / **One-Click Access** - Click to reach, no copy-pasting needed
 - 📱 **响应式设计** - 适配各种屏幕尺寸 / **Responsive Design** - Adapts to various screen sizes
+- 📋 **剪贴板自动填充** - 自动读取系统剪贴板内容并填充到网页指定文本框 / **Clipboard Auto-Fill** - Automatically read system clipboard content and fill it into the specified text box on the web page
 
 ## 🎮 操作指南 / User Guide
 
@@ -42,6 +43,28 @@ Toolsbox is a concise and efficient toolbox application designed to collect and 
 2. 点击右下角"+"按钮添加新工具
 3. 填写工具名称、简介、网址和排序序号
 4. 编辑或删除现有工具项
+
+### 剪贴板自动填充 / Clipboard Auto-Fill
+
+Toolsbox 支持自动读取系统剪贴板内容，并将其填充到网页中的指定文本框。这对于需要频繁输入相同内容的在线工具非常有用。
+
+#### 工作原理 / How It Works
+
+1.  **读取剪贴板**: 当应用启动或从后台恢复时，应用会尝试读取系统剪贴板的内容。
+2.  **页面加载完成**: 当 WebView 中的页面加载完成后，应用会检查当前工具是否配置了剪贴板目标文本框 ID。
+3.  **自动填充**: 如果配置了目标 ID 且剪贴板内容不为空，应用会通过 JavaScript 将剪贴板内容填充到页面上具有该 ID 的文本框中。
+
+#### 配置参数 / Configuration Parameters
+
+要在工具中启用剪贴板自动填充功能，需要在添加或编辑工具时配置 `剪贴板目标文本框ID` 参数。
+
+-   **参数名称**: `剪贴板目标文本框ID` / `Clipboard Target Textbox ID`
+-   **参数说明**: 这是网页上目标文本框的 HTML ID 属性值。应用将使用此 ID 通过 `document.getElementById()` 来定位并填充文本框。
+-   **填写示例**: 如果网页上目标文本框的 HTML 代码是 `<input type="text" id="content-input">`，那么你应该在此参数中填写 `content-input`。
+-   **注意事项**: 
+    - 如果此参数为空或未配置，应用将不会执行自动填充操作。
+    - 确保网页上的文本框具有唯一的 ID 属性。
+    - 应用在后台时无法访问剪贴板（这是 Android 10+ 的安全限制），只有在应用进入前台时才会尝试读取剪贴板内容。
 
 ### 编译方法 / Build Instructions
 #### 环境要求 / Requirements

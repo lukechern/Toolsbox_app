@@ -49,6 +49,7 @@ class AddEditToolDialog : DialogFragment() {
     private lateinit var etName: EditText
     private lateinit var etDescription: EditText
     private lateinit var etUrl: EditText
+    private lateinit var etClipboardTargetId: EditText
     private lateinit var etSortOrder: EditText
     private lateinit var switchDefaultDisplay: SwitchMaterial
     private lateinit var btnSave: MaterialButton
@@ -99,6 +100,7 @@ class AddEditToolDialog : DialogFragment() {
         etName = view.findViewById(R.id.et_tool_name)
         etDescription = view.findViewById(R.id.et_tool_description)
         etUrl = view.findViewById(R.id.et_tool_url)
+        etClipboardTargetId = view.findViewById(R.id.et_clipboard_target_id)
         etSortOrder = view.findViewById(R.id.et_sort_order)
         switchDefaultDisplay = view.findViewById(R.id.switch_default_display)
         btnSave = view.findViewById(R.id.btn_save)
@@ -112,6 +114,7 @@ class AddEditToolDialog : DialogFragment() {
             etName.setText(item.name)
             etDescription.setText(item.description)
             etUrl.setText(item.url)
+            etClipboardTargetId.setText(item.clipboardTargetId)
             etSortOrder.setText(item.sortOrder.toString())
             switchDefaultDisplay.isChecked = item.isDefault
         } ?: run {
@@ -151,6 +154,7 @@ class AddEditToolDialog : DialogFragment() {
         val name = etName.text.toString().trim()
         val description = etDescription.text.toString().trim()
         val url = etUrl.text.toString().trim()
+        val clipboardTargetId = etClipboardTargetId.text.toString().trim()
         val sortOrderStr = etSortOrder.text.toString().trim()
         val isDefault = switchDefaultDisplay.isChecked
         
@@ -177,11 +181,12 @@ class AddEditToolDialog : DialogFragment() {
             return
         }
         
-        val newToolItem = if (isEditMode) {
+        val newToolItem = if (isEditMode && toolItem != null) {
             toolItem!!.copy(
                 name = name,
                 description = description,
                 url = url,
+                clipboardTargetId = clipboardTargetId,
                 sortOrder = sortOrder,
                 isDefault = isDefault
             )
@@ -190,6 +195,7 @@ class AddEditToolDialog : DialogFragment() {
                 name = name,
                 description = description,
                 url = url,
+                clipboardTargetId = clipboardTargetId,
                 sortOrder = sortOrder,
                 isDefault = isDefault
             )
