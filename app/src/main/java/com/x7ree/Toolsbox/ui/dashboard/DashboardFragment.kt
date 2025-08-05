@@ -14,13 +14,16 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.button.MaterialButton
 import com.x7ree.Toolsbox.R
 import com.x7ree.Toolsbox.data.model.ToolItem
 import com.x7ree.Toolsbox.databinding.FragmentDashboardBinding
 import com.x7ree.Toolsbox.ui.dashboard.adapter.ToolItemAdapter
 import com.x7ree.Toolsbox.ui.dashboard.dialog.AddEditToolDialog
+import java.util.Collections
 
 class DashboardFragment : Fragment(), AddEditToolDialog.OnToolItemSaveListener {
 
@@ -29,6 +32,7 @@ class DashboardFragment : Fragment(), AddEditToolDialog.OnToolItemSaveListener {
     
     private lateinit var dashboardViewModel: DashboardViewModel
     private lateinit var toolItemAdapter: ToolItemAdapter
+    private lateinit var itemTouchHelper: ItemTouchHelper
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -65,8 +69,60 @@ class DashboardFragment : Fragment(), AddEditToolDialog.OnToolItemSaveListener {
             onDeleteClick = { toolItem ->
                 // 删除工具项
                 showDeleteConfirmDialog(toolItem)
+            },
+            onDragClick = { toolItem ->
+                // 显示拖拽提示
+                showDragHint()
             }
         )
+        
+        // 初始化 ItemTouchHelper
+        val callback = object : ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP or ItemTouchHelper.DOWN, 0) {
+            override fun onMove(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, target: RecyclerView.ViewHolder): Boolean {
+                val fromPosition = viewHolder.adapterPosition
+                val toPosition = target.adapterPosition
+                
+                // 交换列表中项目的位置
+                val currentList = toolItemAdapter.currentList.toMutableList()
+                if (fromPosition < toPosition) {
+                    for (i in fromPosition until toPosition) {
+                        Collections.swap(currentList, i, i + 1)
+                    }
+                } else {
+                    for (i in fromPosition downTo toPosition + 1) {
+                        Collections.swap(currentList, i, i - 1)
+                    }
+                }
+                
+                // 更新适配器
+                toolItemAdapter.submitList(currentList)
+                return true
+            }
+            
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                // 不处理滑动操作
+            }
+            
+            override fun isLongPressDragEnabled(): Boolean {
+                return false // 我们通过拖拽图标触发拖拽，而不是长按
+            }
+            
+            override fun isItemViewSwipeEnabled(): Boolean {
+                return false // 禁用滑动
+            }
+            
+            override fun clearView(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder) {
+                super.clearView(recyclerView, viewHolder)
+                // 拖拽结束后更新排序序号
+                updateSortOrder()
+            }
+        }
+        
+        itemTouchHelper = ItemTouchHelper(callback)
+        itemTouchHelper.attachToRecyclerView(binding.recyclerViewTools)
+        
+        // 将 ItemTouchHelper 传递给适配器
+        toolItemAdapter.setItemTouchHelper(itemTouchHelper)
         
         binding.recyclerViewTools.apply {
             layoutManager = LinearLayoutManager(context)
@@ -150,6 +206,23 @@ class DashboardFragment : Fragment(), AddEditToolDialog.OnToolItemSaveListener {
         } else {
             dashboardViewModel.addToolItem(toolItem)
             Toast.makeText(context, R.string.tool_added, Toast.LENGTH_SHORT).show()
+        }
+    }
+    
+    private fun showDragHint() {
+        // 显示拖拽提示条
+        Toast.makeText(context, "按住拖动可给工具项目排序", Toast.LENGTH_SHORT).show()
+    }
+    
+    private fun updateSortOrder() {
+        // 更新排序序号
+        val currentList = toolItemAdapter.currentList
+        for (i in currentList.indices) {
+            val toolItem = currentList[i]
+            // 创建一个新的 ToolItem 对象，更新 sortOrder
+            val updatedToolItem = toolItem.copy(sortOrder = i + 1)
+            // 更新数据库中的工具项
+            dashboardViewModel.updateToolItem(updatedToolItem)
         }
     }
 

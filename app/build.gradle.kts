@@ -12,8 +12,8 @@ android {
         applicationId = "com.x7ree.Toolsbox"
         minSdk = 24
         targetSdk = 36
-        versionCode = 7
-        versionName = "1.61"
+        versionCode = 8
+        versionName = "1.71"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
