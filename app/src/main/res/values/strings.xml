@@ -31,4 +31,10 @@
     <string name="no_tools_available">暂无可用工具\n请在配置页面添加工具</string>
     <string name="loading">加载中...</string>
     <string name="load_error">加载失败</string>
+    
+    <!-- 缓存管理相关 -->
+    <string name="clear_cache">清除缓存</string>
+    <string name="confirm_clear_cache">确定要清除所有工具网址的缓存吗？\n\n此操作将清除所有已缓存的网页数据，包括登录状态、表单数据等。</string>
+    <string name="cache_cleared">缓存已清除</string>
+    <string name="clear_cache_failed">清除缓存失败</string>
 </resources>

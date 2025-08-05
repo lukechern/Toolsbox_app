@@ -4,5 +4,7 @@
         <domain includeSubdomains="true">192.168.</domain>
         <domain includeSubdomains="true">cloudclipboard.net</domain>
         <domain includeSubdomains="true">7ree.tech</domain>
+        <domain includeSubdomains="true">pages.dev</domain>
+        <domain includeSubdomains="true">cloudflare.com</domain>
     </domain-config>
 </network-security-config>

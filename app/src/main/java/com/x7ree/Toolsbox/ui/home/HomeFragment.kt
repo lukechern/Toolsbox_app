@@ -1,6 +1,10 @@
 package com.x7ree.Toolsbox.ui.home
 
 import android.annotation.SuppressLint
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.Menu
@@ -8,6 +12,8 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import android.webkit.JavascriptInterface
+import android.webkit.PermissionRequest
 import android.webkit.WebChromeClient
 import android.webkit.WebView
 import android.webkit.WebViewClient
@@ -86,6 +92,26 @@ class HomeFragment : Fragment() {
             settings.builtInZoomControls = true
             settings.displayZoomControls = false
             
+            // 允许文件访问和内容访问
+            settings.allowFileAccess = true
+            settings.allowContentAccess = true
+            settings.allowFileAccessFromFileURLs = true
+            settings.allowUniversalAccessFromFileURLs = true
+            
+            // 启用混合内容模式（允许HTTPS页面加载HTTP资源）
+            settings.mixedContentMode = android.webkit.WebSettings.MIXED_CONTENT_ALWAYS_ALLOW
+            
+            // 针对 Android 10 及更高版本的额外配置
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                settings.forceDark = android.webkit.WebSettings.FORCE_DARK_OFF
+            }
+            
+            // 设置用户代理，模拟桌面浏览器以获得更好的兼容性
+            settings.userAgentString = settings.userAgentString + " Chrome/91.0.4472.124"
+            
+            // 添加 JavaScript 接口以支持剪贴板操作
+            addJavascriptInterface(ClipboardJavaScriptInterface(requireContext()), "AndroidClipboard")
+            
             webViewClient = object : WebViewClient() {
                 override fun onPageStarted(view: WebView?, url: String?, favicon: android.graphics.Bitmap?) {
                     super.onPageStarted(view, url, favicon)
@@ -118,6 +144,15 @@ class HomeFragment : Fragment() {
                 override fun onReceivedTitle(view: WebView?, title: String?) {
                     super.onReceivedTitle(view, title)
                     // 可以在这里更新标题
+                }
+                
+                // 处理权限请求，允许访问剪贴板等系统资源
+                override fun onPermissionRequest(request: PermissionRequest?) {
+                    request?.let {
+                        // 自动授予所有权限请求，包括剪贴板访问
+                        // 这样可以确保网页能够访问所需的系统功能
+                        it.grant(it.resources)
+                    }
                 }
             }
         }
@@ -232,5 +267,40 @@ class HomeFragment : Fragment() {
     // 打开侧滑菜单
     fun openDrawer() {
         binding.drawerLayout.openDrawer(GravityCompat.END)
+    }
+    
+    /**
+     * JavaScript 接口类，用于处理剪贴板操作
+     */
+    private inner class ClipboardJavaScriptInterface(private val context: Context) {
+        
+        @JavascriptInterface
+        fun readClipboard(): String {
+            return try {
+                val clipboardManager = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+                val clipData = clipboardManager.primaryClip
+                if (clipData != null && clipData.itemCount > 0) {
+                    clipData.getItemAt(0).text?.toString() ?: ""
+                } else {
+                    ""
+                }
+            } catch (e: Exception) {
+                e.printStackTrace()
+                ""
+            }
+        }
+        
+        @JavascriptInterface
+        fun writeClipboard(text: String): Boolean {
+            return try {
+                val clipboardManager = context.getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+                val clipData = ClipData.newPlainText("text", text)
+                clipboardManager.setPrimaryClip(clipData)
+                true
+            } catch (e: Exception) {
+                e.printStackTrace()
+                false
+            }
+        }
     }
 }
