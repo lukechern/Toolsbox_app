@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Toolsbox</string>
-    <string name="title_home">工具</string>
-    <string name="title_dashboard">配置</string>
+    <string name="title_home">工具箱</string>
+    <string name="title_dashboard">配置项</string>
     
     <!-- 工具管理相关 -->
     <string name="add_tool">添加工具</string>

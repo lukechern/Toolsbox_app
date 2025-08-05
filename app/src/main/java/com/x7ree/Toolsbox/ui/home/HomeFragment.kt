@@ -48,6 +48,9 @@ class HomeFragment : Fragment() {
         observeData()
         setupAnimatedMenu()
         
+        // 设置默认标题
+        activity?.title = "工具箱"
+        
         return binding.root
     }
     

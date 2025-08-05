@@ -46,6 +46,9 @@ class DashboardFragment : Fragment(), AddEditToolDialog.OnToolItemSaveListener {
         setupRecyclerView()
         observeData()
         
+        // 设置页面标题
+        activity?.title = "配置项"
+        
         return binding.root
     }
     
