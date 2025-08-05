@@ -10,7 +10,7 @@
     <string name="tool_name">工具名称</string>
     <string name="tool_description">工具简介</string>
     <string name="tool_url">工具网址</string>
-    <string name="sort_order">排序序号</string>
+    <string name="sort_order">序号</string>
     <string name="default_display">默认工具</string>
     <string name="save">保存</string>
     <string name="cancel">取消</string>

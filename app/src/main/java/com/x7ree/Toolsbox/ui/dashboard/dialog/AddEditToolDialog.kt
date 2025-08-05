@@ -23,16 +23,19 @@ class AddEditToolDialog : DialogFragment() {
     companion object {
         private const val ARG_TOOL_ITEM = "tool_item"
         private const val ARG_IS_EDIT_MODE = "is_edit_mode"
+        private const val ARG_TOOL_COUNT = "tool_count"
         
-        fun newInstance(toolItem: ToolItem? = null): AddEditToolDialog {
+        fun newInstance(toolItem: ToolItem? = null, toolCount: Int = 0): AddEditToolDialog {
             val dialog = AddEditToolDialog()
             val args = Bundle()
             args.putParcelable(ARG_TOOL_ITEM, toolItem)
             args.putBoolean(ARG_IS_EDIT_MODE, toolItem != null)
+            args.putInt(ARG_TOOL_COUNT, toolCount)
             dialog.arguments = args
             return dialog
         }
     }
+    
     
     interface OnToolItemSaveListener {
         fun onToolItemSave(toolItem: ToolItem, isEditMode: Boolean)
@@ -41,6 +44,7 @@ class AddEditToolDialog : DialogFragment() {
     private var listener: OnToolItemSaveListener? = null
     private var toolItem: ToolItem? = null
     private var isEditMode: Boolean = false
+    private var toolCount: Int = 0
     
     private lateinit var etName: EditText
     private lateinit var etDescription: EditText
@@ -66,9 +70,9 @@ class AddEditToolDialog : DialogFragment() {
         arguments?.let {
             toolItem = it.getParcelable(ARG_TOOL_ITEM)
             isEditMode = it.getBoolean(ARG_IS_EDIT_MODE, false)
+            toolCount = it.getInt(ARG_TOOL_COUNT, 0)
         }
     }
-    
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val view = LayoutInflater.from(requireContext())
             .inflate(R.layout.dialog_add_edit_tool, null)
@@ -110,6 +114,10 @@ class AddEditToolDialog : DialogFragment() {
             etUrl.setText(item.url)
             etSortOrder.setText(item.sortOrder.toString())
             switchDefaultDisplay.isChecked = item.isDefault
+        } ?: run {
+            // 新增卡片时的默认值
+            etUrl.setText("https://")
+            etSortOrder.setText((toolCount + 1).toString())
         }
         updateSwitchTextColors(switchDefaultDisplay.isChecked)
     }

@@ -161,7 +161,8 @@ class DashboardFragment : Fragment(), AddEditToolDialog.OnToolItemSaveListener {
     }
     
     private fun showAddEditDialog(toolItem: ToolItem?) {
-        val dialog = AddEditToolDialog.newInstance(toolItem)
+        val toolCount = toolItemAdapter.currentList.size
+        val dialog = AddEditToolDialog.newInstance(toolItem, toolCount)
         dialog.show(childFragmentManager, "AddEditToolDialog")
     }
     
