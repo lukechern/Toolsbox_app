@@ -208,6 +208,13 @@ class HomeFragment : Fragment() {
             adapter = toolDrawerAdapter
         }
         
+        // 设置刷新按钮点击事件
+        binding.layoutRefresh.setOnClickListener {
+            refreshCurrentPage()
+            // 点击后关闭侧边栏
+            binding.drawerLayout.closeDrawer(GravityCompat.END)
+        }
+        
         // 监听抽屉状态变化以更新菜单图标
         binding.drawerLayout.addDrawerListener(object : DrawerLayout.DrawerListener {
             override fun onDrawerSlide(drawerView: View, slideOffset: Float) {
@@ -374,6 +381,19 @@ class HomeFragment : Fragment() {
            .replace("\r", "\\r")         // 转义回车符
            .replace("\t", "\\t")         // 转义制表符
    }
+    
+    /**
+     * 刷新当前页面
+     */
+    private fun refreshCurrentPage() {
+        try {
+            Log.d("HomeFragment", "刷新当前页面")
+            binding.webview.reload()
+        } catch (e: Exception) {
+            Log.e("HomeFragment", "刷新页面时出错", e)
+            e.printStackTrace()
+        }
+    }
     
     /**
      * JavaScript 接口类，用于处理剪贴板操作

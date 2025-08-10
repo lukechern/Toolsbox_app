@@ -12,7 +12,7 @@
     <img src="https://img.shields.io/badge/License-MIT-yellow.svg?style=for-the-badge" alt="License: MIT">
   </a>
   <a href="https://github.com/lukechern/Toolsbox_app">
-    <img src="https://img.shields.io/badge/version-2.0-blue.svg?style=for-the-badge" alt="Version">
+    <img src="https://img.shields.io/badge/version-2.1-blue.svg?style=for-the-badge" alt="Version">
   </a>
 </p>
 
