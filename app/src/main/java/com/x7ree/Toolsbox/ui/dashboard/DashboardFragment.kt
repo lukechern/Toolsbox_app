@@ -9,9 +9,7 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.webkit.CookieManager
-import android.webkit.WebStorage
-import android.webkit.WebView
+
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
@@ -52,7 +50,6 @@ class DashboardFragment : Fragment(), AddEditToolDialog.OnToolItemSaveListener {
         
         setupRecyclerView()
         observeData()
-        setupClearCacheButton()
         
         // 设置页面标题
         activity?.title = "配置项"
@@ -231,92 +228,7 @@ class DashboardFragment : Fragment(), AddEditToolDialog.OnToolItemSaveListener {
         }
     }
     
-    private fun setupClearCacheButton() {
-        binding.btnClearCache.setOnClickListener {
-            showClearCacheConfirmDialog()
-        }
-    }
-    
-    private fun showClearCacheConfirmDialog() {
-        val customView = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_delete_confirm, null)
-        val btnCancel = customView.findViewById<MaterialButton>(R.id.btn_cancel)
-        val btnDelete = customView.findViewById<MaterialButton>(R.id.btn_delete)
-        val tvMessage = customView.findViewById<TextView>(R.id.tv_message)
 
-        // 修改按钮文本和消息
-        tvMessage.text = getString(R.string.confirm_clear_cache)
-        btnDelete.text = getString(R.string.clear_cache)
-
-        val dialog = AlertDialog.Builder(requireContext())
-            .setTitle(R.string.clear_cache)
-            .setView(customView)
-            .setCancelable(false)
-            .show()
-
-        btnCancel.setOnClickListener {
-            dialog.dismiss()
-        }
-
-        btnDelete.setOnClickListener {
-            clearWebViewCache()
-            dialog.dismiss()
-        }
-    }
-    
-    private fun clearWebViewCache() {
-        try {
-            // 清除 WebView 缓存
-            val webView = WebView(requireContext())
-            webView.clearCache(true)
-            webView.clearFormData()
-            webView.clearHistory()
-            webView.clearSslPreferences()
-            
-            // 清除 WebView 数据目录
-            val webViewDataDir = java.io.File(requireContext().applicationInfo.dataDir, "app_webview")
-            if (webViewDataDir.exists()) {
-                deleteRecursive(webViewDataDir)
-            }
-            
-            // 清除应用缓存目录
-            val cacheDir = requireContext().cacheDir
-            if (cacheDir.exists()) {
-                cacheDir.listFiles()?.forEach { file ->
-                    deleteRecursive(file)
-                }
-            }
-            
-            // 清除外部缓存目录
-            val externalCacheDir = requireContext().externalCacheDir
-            if (externalCacheDir?.exists() == true) {
-                externalCacheDir.listFiles()?.forEach { file ->
-                    deleteRecursive(file)
-                }
-            }
-            
-            // 清除 WebView 的 cookies 和本地存储
-            CookieManager.getInstance().removeAllCookies(null)
-            WebStorage.getInstance().deleteAllData()
-            
-            Toast.makeText(context, R.string.cache_cleared, Toast.LENGTH_SHORT).show()
-        } catch (e: Exception) {
-            e.printStackTrace()
-            Toast.makeText(context, R.string.clear_cache_failed, Toast.LENGTH_SHORT).show()
-        }
-    }
-    
-    private fun deleteRecursive(fileOrDirectory: java.io.File) {
-        try {
-            if (fileOrDirectory.isDirectory) {
-                fileOrDirectory.listFiles()?.forEach { child ->
-                    deleteRecursive(child)
-                }
-            }
-            fileOrDirectory.delete()
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-    }
 
     override fun onDestroyView() {
         super.onDestroyView()

@@ -28,6 +28,10 @@ import com.x7ree.Toolsbox.databinding.FragmentHomeBinding
 import com.x7ree.Toolsbox.ui.home.adapter.ToolDrawerAdapter
 
 import android.util.Log
+import android.widget.TextView
+import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
+import com.google.android.material.button.MaterialButton
 
 class HomeFragment : Fragment() {
 
@@ -215,6 +219,11 @@ class HomeFragment : Fragment() {
             binding.drawerLayout.closeDrawer(GravityCompat.END)
         }
         
+        // 设置清除缓存按钮点击事件
+        binding.layoutClearCache.setOnClickListener {
+            showClearCacheConfirmDialog()
+        }
+        
         // 监听抽屉状态变化以更新菜单图标
         binding.drawerLayout.addDrawerListener(object : DrawerLayout.DrawerListener {
             override fun onDrawerSlide(drawerView: View, slideOffset: Float) {
@@ -392,6 +401,107 @@ class HomeFragment : Fragment() {
         } catch (e: Exception) {
             Log.e("HomeFragment", "刷新页面时出错", e)
             e.printStackTrace()
+        }
+    }
+    
+    /**
+     * 显示清除缓存确认对话框
+     */
+    private fun showClearCacheConfirmDialog() {
+        val customView = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_delete_confirm, null)
+        val btnCancel = customView.findViewById<MaterialButton>(R.id.btn_cancel)
+        val btnDelete = customView.findViewById<MaterialButton>(R.id.btn_delete)
+        val tvMessage = customView.findViewById<TextView>(R.id.tv_message)
+
+        // 修改按钮文本和消息
+        tvMessage.text = "确定要清除当前页面的缓存吗？"
+        btnDelete.text = "清除缓存"
+
+        val dialog = AlertDialog.Builder(requireContext())
+            .setTitle("清除缓存")
+            .setView(customView)
+            .setCancelable(false)
+            .show()
+
+        btnCancel.setOnClickListener {
+            dialog.dismiss()
+        }
+
+        btnDelete.setOnClickListener {
+            clearCurrentPageCache()
+            dialog.dismiss()
+            // 点击后关闭侧边栏
+            binding.drawerLayout.closeDrawer(GravityCompat.END)
+        }
+    }
+    
+    /**
+     * 清除当前页面缓存
+     */
+    private fun clearCurrentPageCache() {
+        try {
+            Log.d("HomeFragment", "清除当前页面缓存")
+            val currentUrl = binding.webview.url
+            if (currentUrl != null) {
+                // 清除当前页面的缓存和数据
+                binding.webview.clearCache(true)
+                binding.webview.clearFormData()
+                
+                // 清除当前域名的cookies
+                val cookieManager = android.webkit.CookieManager.getInstance()
+                val domain = extractDomainFromUrl(currentUrl)
+                if (domain.isNotEmpty()) {
+                    val cookies = cookieManager.getCookie(currentUrl)
+                    cookies?.split(";")?.forEach { cookie ->
+                        val cookieName = cookie.split("=")[0].trim()
+                        cookieManager.setCookie(currentUrl, "$cookieName=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/")
+                    }
+                }
+                
+                // 清除当前页面的本地存储
+                binding.webview.evaluateJavascript(
+                    """
+                    try {
+                        localStorage.clear();
+                        sessionStorage.clear();
+                        if (typeof indexedDB !== 'undefined') {
+                            indexedDB.databases().then(databases => {
+                                databases.forEach(db => {
+                                    indexedDB.deleteDatabase(db.name);
+                                });
+                            });
+                        }
+                    } catch(e) {
+                        console.log('清除存储时出错:', e);
+                    }
+                    """.trimIndent(),
+                    null
+                )
+                
+                // 重新加载页面以应用缓存清除
+                binding.webview.reload()
+                
+                // 显示成功提示
+                Toast.makeText(context, "当前页面缓存已清除", Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(context, "没有加载的页面", Toast.LENGTH_SHORT).show()
+            }
+        } catch (e: Exception) {
+            Log.e("HomeFragment", "清除当前页面缓存时出错", e)
+            e.printStackTrace()
+            Toast.makeText(context, "清除缓存失败", Toast.LENGTH_SHORT).show()
+        }
+    }
+    
+    /**
+     * 从URL中提取域名
+     */
+    private fun extractDomainFromUrl(url: String): String {
+        return try {
+            val uri = android.net.Uri.parse(url)
+            uri.host ?: ""
+        } catch (e: Exception) {
+            ""
         }
     }
     
